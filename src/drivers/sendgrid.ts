@@ -1,0 +1,82 @@
+import Axios from 'axios'
+import { SendgridConfig } from 'tellimail'
+import Mailable, { MailablePerson, MailablePersonalization } from '../mailable'
+import { MailDriver } from './driver'
+
+interface SendgridContent {
+  type: 'text/html';
+  value: string;
+}
+
+interface SendgridMailSettings {
+  sandbox_mode: {
+    enable: boolean;
+  };
+}
+
+interface SendgridData {
+  personalizations: MailablePersonalization[];
+  from: MailablePerson;
+  subject: string;
+  content: SendgridContent[];
+  mail_settings: SendgridMailSettings;
+}
+
+export class SendgridDriver extends MailDriver {
+  protected _config: SendgridConfig
+
+  public get config(): SendgridConfig {
+    return this._config
+  }
+
+  public constructor(config: SendgridConfig) {
+    super(config)
+  }
+
+  public async transport(mailable: Mailable, callback?: CallableFunction): Promise<boolean> {
+    const chunkSize = 1000
+    for (let i = 0; i < mailable.personalizations.length; i += chunkSize) {
+      const personalizations = mailable.personalizations.slice(i, i + chunkSize)
+      const success = await this.sendTo(mailable, personalizations)
+      if (!success) {
+        return false
+      } else if (callback) {
+        await callback(personalizations)
+      }
+    }
+
+    return true
+  }
+
+  protected async sendTo(mailable: Mailable, personalizations: MailablePersonalization[]): Promise<boolean> {
+    const data: SendgridData = {
+      personalizations,
+      from: mailable.from,
+      subject: mailable.subject,
+      content: [{
+        type: 'text/html',
+        value: await mailable.render(),
+      }],
+      mail_settings: {
+        sandbox_mode: {
+          enable: this.config.sandbox === undefined ? false : this.config.sandbox,
+        },
+      },
+    }
+
+    try {
+      await Axios.post('https://api.sendgrid.com/v3/mail/send', data, {
+        headers: {
+          authorization: `Bearer ${this.config.apiKey}`,
+          contentType: 'application/json',
+        },
+      })
+    } catch (err) {
+      throw err
+
+      return false
+    }
+
+    return true
+  }
+}

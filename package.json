@@ -1,0 +1,72 @@
+{
+  "name": "tellimail",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint 'src/**/*.ts'"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/inline-css": "^0.0.31",
+    "@types/uuid": "^3.4.4",
+    "@types/vue": "^2.0.0",
+    "typescript": "^3.4.5",
+    "vue-mixin-decorator": "^1.1.1",
+    "@typescript-eslint/eslint-plugin": "^1.7.0",
+    "@typescript-eslint/parser": "^1.5.0",
+    "eslint": "^5.15.3"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "inline-css": "^2.4.1",
+    "uuid": "^3.3.2",
+    "vue": "^2.6.10",
+    "vue-server-renderer": "^2.6.10"
+  },
+
+  "eslintConfig": {
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "root": true,
+    "env": {
+      "mocha": true,
+      "node": true
+    },
+    "extends": [
+      "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+      "@typescript-eslint/indent": [
+        "error",
+        2
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "@typescript-eslint/camelcase": "off",
+      "semi": [
+        "error",
+        "never"
+      ],
+      "@typescript-eslint/explicit-function-return-type": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "eol-last": [
+        "error",
+        "always"
+      ]
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "useJSXTextNode": true,
+      "project": "./tsconfig.json",
+      "tsconfigRootDir": "./"
+    }
+  }
+}
