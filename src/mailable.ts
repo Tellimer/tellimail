@@ -4,6 +4,7 @@ import { View } from './view'
 export interface MailablePerson {
   email: string;
   name?: string;
+  user?: any;
 }
 
 export interface MailablePersonalization {

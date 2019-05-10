@@ -1,5 +1,7 @@
-import { MailConfig } from 'tellimail'
 import { MailableBase } from '../mailable'
+import { MailConfig } from '@/mail'
+
+
 
 export abstract class MailDriver {
   protected _config: MailConfig;
@@ -23,6 +25,8 @@ export abstract class MailDriver {
     if (!mailable.subject) {
       throw new Error('Mailable has no subject. Please set the subject property or use the .withSubject() method')
     }
+
+    return true
   }
 
   public async send(mailable: MailableBase, callback?: CallableFunction): Promise<boolean> {
@@ -35,5 +39,5 @@ export abstract class MailDriver {
     return success
   }
 
-  abstract async transport(mailable: MailableBase, callback?: CallableFunction): Promise<boolean>;
+  protected abstract async transport(mailable: MailableBase, callback?: CallableFunction): Promise<boolean>;
 }

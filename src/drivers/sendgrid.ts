@@ -1,8 +1,14 @@
 import Axios from 'axios'
-import { SendgridConfig } from 'tellimail'
 import { MailablePerson, MailablePersonalization } from '../mailable'
 import { MailDriver } from './driver'
 import { MailableBase } from '..'
+import { MailConfig } from '@/mail'
+
+export interface SendgridConfig extends MailConfig {
+  driver: 'sendgrid';
+  sandbox?: boolean;
+  apiKey: string;
+}
 
 interface SendgridContent {
   type: 'text/html';
@@ -34,7 +40,7 @@ export class SendgridDriver extends MailDriver {
     super(config)
   }
 
-  public async transport(mailable: MailableBase, callback?: CallableFunction): Promise<boolean> {
+  protected async transport(mailable: MailableBase, callback?: CallableFunction): Promise<boolean> {
     const chunkSize = 1000
     for (let i = 0; i < mailable.personalizations.length; i += chunkSize) {
       const personalizations = mailable.personalizations.slice(i, i + chunkSize)
