@@ -1,5 +1,5 @@
 import { MailConfig } from 'tellimail'
-import Mailable from '../mailable'
+import { MailableBase } from '../mailable'
 
 export abstract class MailDriver {
   protected _config: MailConfig;
@@ -8,17 +8,32 @@ export abstract class MailDriver {
     return this._config
   }
 
-  public constructor (config: MailConfig) {
+  public constructor(config: MailConfig) {
     this._config = config
   }
 
-  public async send(mailable: Mailable, callback?: CallableFunction): Promise<boolean> {
+  protected check(mailable: MailableBase) {
+    if (!mailable.from) {
+      mailable.from = this._config.defaultFrom
+    }
+    if (!mailable.personalizations || mailable.personalizations.length === 0) {
+      throw new Error('Mailable has no one to send to. Please set the personalizations property or use the .to() method')
+    }
+
+    if (!mailable.subject) {
+      throw new Error('Mailable has no subject. Please set the subject property or use the .withSubject() method')
+    }
+  }
+
+  public async send(mailable: MailableBase, callback?: CallableFunction): Promise<boolean> {
     mailable.build()
+
+    this.check(mailable)
 
     const success = await this.transport(mailable, callback)
 
     return success
   }
 
-  abstract async transport(mailable: Mailable, callback?: CallableFunction): Promise<boolean>;
+  abstract async transport(mailable: MailableBase, callback?: CallableFunction): Promise<boolean>;
 }

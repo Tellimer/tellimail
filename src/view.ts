@@ -6,8 +6,8 @@ export class View {
   protected template: string
   protected mixin: ComponentOptions<Vue> | typeof Vue
   protected cssThemeFile: string
-  public constructor(template: string, mixin: ComponentOptions<Vue> | typeof Vue, cssThemeFile?: string) {
-    this.mixin = mixin
+  public constructor(template: string, mixin?: ComponentOptions<Vue> | typeof Vue, cssThemeFile?: string) {
+    this.mixin = mixin === undefined ? {} : mixin
     this.template = template
     this.cssThemeFile = cssThemeFile
   }

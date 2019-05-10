@@ -1,5 +1,4 @@
 import uuid from 'uuid'
-import mail from '.'
 import { View } from './view'
 
 export interface MailablePerson {
@@ -13,7 +12,7 @@ export interface MailablePersonalization {
   substitutions?: Record<string, string>;
 }
 
-export default abstract class Mailable {
+export abstract class MailableBase {
   public uuid: string
 
   public constructor() {
@@ -24,16 +23,12 @@ export default abstract class Mailable {
 
   abstract build(): void;
 
-  public async send(callback?: CallableFunction): Promise<boolean> {
-    return await mail().send(this, callback)
-  }
-
   public async render(): Promise<string> {
     return (await this.view()).render()
   }
 
 
-  private _from: MailablePerson = mail().config.defaultFrom
+  private _from: MailablePerson
   public get from(): MailablePerson {
     return this._from
   }
@@ -50,6 +45,12 @@ export default abstract class Mailable {
     this._categories = v
   }
 
+  public withCategories(categories: string[]) {
+    this.categories = categories
+
+    return this
+  }
+
 
   private _subject: string;
   public get subject(): string {
@@ -57,6 +58,12 @@ export default abstract class Mailable {
   }
   public set subject(v: string) {
     this._subject = v
+  }
+
+  public withSubject(subject: string) {
+    this.subject = subject
+
+    return this
   }
 
 
@@ -77,6 +84,12 @@ export default abstract class Mailable {
     })
   }
 
+  public withPersonalizations(personalizations: MailablePersonalization[]) {
+    this.personalizations = personalizations
+
+    return this
+  }
+
   public to(obj: MailablePersonalization | MailablePerson) {
     if ((obj as MailablePersonalization).to !== undefined) {
       this.personalizations.push(obj as MailablePersonalization)
@@ -88,4 +101,24 @@ export default abstract class Mailable {
   }
 
 
+}
+
+export class Mailable extends MailableBase {
+  protected _view: View | Promise<View>
+  protected buildCallback: (mailable: Mailable) => void
+  public constructor(view: View | Promise<View>, buildCallback?: (mailable: Mailable) => void) {
+    super()
+    this._view = view
+    this.buildCallback = buildCallback
+  }
+
+  public build() {
+    if (this.buildCallback) {
+      this.buildCallback(this)
+    }
+  }
+
+  public view() {
+    return this._view
+  }
 }
