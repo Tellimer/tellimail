@@ -23,7 +23,7 @@ export class View {
 
 }
 
-export default async function view(file: string, mixin: ComponentOptions<Vue> | typeof Vue, cssThemeFile?: string): Promise<View> {
+export async function templateView(file: string, mixin?: ComponentOptions<Vue> | typeof Vue, cssThemeFile?: string): Promise<View> {
   if (!await fs.existsSync(file)) {
     throw new Error(`Template file '${file}' does not exist.`)
   }

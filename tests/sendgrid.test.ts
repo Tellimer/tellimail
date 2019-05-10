@@ -1,5 +1,6 @@
-import mail, { View, Mailable } from '../src/index'
+import mail, { View, Mailable, templateView } from '../src/index'
 import { expect } from 'chai'
+import path from 'path'
 
 describe('Sendgrid', () => {
   const mailer = mail({
@@ -56,6 +57,39 @@ describe('Sendgrid', () => {
     })
 
     expect(success).to.equal(true)
+  })
+
+  it('Renders template from file', async () => {
+    const mailable = new Mailable(await templateView(path.resolve(__dirname, 'template.html')))
+    const template = await mailable.render()
+
+    expect(template).to.equal('<html data-server-rendered="true"><head></head> <body><h1>hello world</h1></body></html>')
+  })
+
+  it('Renders template with mixin', async () => {
+    const text = 'goodbye world'
+    const view = await templateView(path.resolve(__dirname, 'reactive-template.html'), {
+      data() {
+        return { text }
+      }
+    })
+    const mailable = new Mailable(view)
+    const template = await mailable.render()
+
+    expect(template).to.equal(`<html data-server-rendered="true"><head></head> <body><h1>${text}</h1></body></html>`)
+  })
+
+  it('Renders template with mixin and css file', async () => {
+    const text = 'goodbye world'
+    const view = await templateView(path.resolve(__dirname, 'reactive-template.html'), {
+      data() {
+        return { text }
+      }
+    }, path.resolve(__dirname, 'template.css'))
+    const mailable = new Mailable(view)
+    const template = await mailable.render()
+
+    expect(template).to.equal(`<html data-server-rendered="true"><head></head> <body><h1 style="color: red;">${text}</h1></body></html>`)
   })
 
   it('Can send to more than 1000 people', async () => {

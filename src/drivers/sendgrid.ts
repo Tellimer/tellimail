@@ -1,7 +1,8 @@
 import Axios from 'axios'
 import { SendgridConfig } from 'tellimail'
-import Mailable, { MailablePerson, MailablePersonalization } from '../mailable'
+import { MailablePerson, MailablePersonalization } from '../mailable'
 import { MailDriver } from './driver'
+import { MailableBase } from '..'
 
 interface SendgridContent {
   type: 'text/html';
@@ -33,7 +34,7 @@ export class SendgridDriver extends MailDriver {
     super(config)
   }
 
-  public async transport(mailable: Mailable, callback?: CallableFunction): Promise<boolean> {
+  public async transport(mailable: MailableBase, callback?: CallableFunction): Promise<boolean> {
     const chunkSize = 1000
     for (let i = 0; i < mailable.personalizations.length; i += chunkSize) {
       const personalizations = mailable.personalizations.slice(i, i + chunkSize)
@@ -48,7 +49,7 @@ export class SendgridDriver extends MailDriver {
     return true
   }
 
-  protected async sendTo(mailable: Mailable, personalizations: MailablePersonalization[]): Promise<boolean> {
+  protected async sendTo(mailable: MailableBase, personalizations: MailablePersonalization[]): Promise<boolean> {
     const data: SendgridData = {
       personalizations,
       from: mailable.from,
@@ -64,18 +65,12 @@ export class SendgridDriver extends MailDriver {
       },
     }
 
-    try {
-      await Axios.post('https://api.sendgrid.com/v3/mail/send', data, {
-        headers: {
-          authorization: `Bearer ${this.config.apiKey}`,
-          contentType: 'application/json',
-        },
-      })
-    } catch (err) {
-      throw err
-
-      return false
-    }
+    await Axios.post('https://api.sendgrid.com/v3/mail/send', data, {
+      headers: {
+        authorization: `Bearer ${this.config.apiKey}`,
+        contentType: 'application/json',
+      },
+    })
 
     return true
   }
