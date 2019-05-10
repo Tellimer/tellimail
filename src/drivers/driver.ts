@@ -1,5 +1,5 @@
 import { MailableBase } from '../mailable'
-import { MailConfig } from '@/mail'
+import { MailConfig } from '../mail'
 
 
 
