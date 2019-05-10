@@ -1,5 +1,5 @@
 import { MailableBase } from '../mailable';
-import { MailConfig } from '@/mail';
+import { MailConfig } from '../mail';
 export declare abstract class MailDriver {
     protected _config: MailConfig;
     readonly config: MailConfig;

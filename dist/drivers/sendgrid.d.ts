@@ -1,7 +1,7 @@
 import { MailablePersonalization } from '../mailable';
 import { MailDriver } from './driver';
 import { MailableBase } from '..';
-import { MailConfig } from '@/mail';
+import { MailConfig } from '../mail';
 export interface SendgridConfig extends MailConfig {
     driver: 'sendgrid';
     sandbox?: boolean;
