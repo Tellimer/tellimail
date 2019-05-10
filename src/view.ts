@@ -4,7 +4,6 @@ import render from './render'
 
 export class View {
   protected template: string
-  protected data: object
   protected mixin: ComponentOptions<Vue> | typeof Vue
   protected cssThemeFile: string
   public constructor(template: string, mixin: ComponentOptions<Vue> | typeof Vue, cssThemeFile?: string) {
@@ -14,13 +13,9 @@ export class View {
   }
 
   public async render(): Promise<string> {
-    const data = this.data
     const app = new Vue({
       mixins: [this.mixin],
       template: this.template,
-      data() {
-        return data
-      }
     })
 
     return await render(app, this.cssThemeFile)
