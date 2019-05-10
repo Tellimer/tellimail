@@ -1,6 +1,6 @@
 {
   "name": "tellimail",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "scripts": {
     "build": "tsc",
     "lint": "eslint 'src/**/*.ts'",
