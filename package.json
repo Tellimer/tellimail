@@ -1,5 +1,5 @@
 {
-  "name": "tellimail",
+  "name": "@tellimer/tellimail",
   "version": "0.0.23",
   "scripts": {
     "build": "tsc",
