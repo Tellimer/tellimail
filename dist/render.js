@@ -27,7 +27,6 @@ function render(app, themeFile) {
         if (themeFile) {
             extraCss = yield getCssFile(themeFile);
         }
-        console.log(extraCss, html);
         return yield juice_1.default(html, Object.assign({ applyAttributesTableElements: false }, (extraCss !== null ? { extraCss } : {})));
     });
 }
