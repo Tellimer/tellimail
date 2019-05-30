@@ -27,6 +27,7 @@ function render(app, themeFile) {
         if (themeFile) {
             extraCss = yield getCssFile(themeFile);
         }
+        console.log(extraCss, html);
         return yield inline_css_1.default(html, Object.assign({}, (extraCss !== null ? { extraCss } : {}), { url: ' ' }));
     });
 }
