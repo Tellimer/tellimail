@@ -20,6 +20,8 @@ export default async function render(app: Vue, themeFile?: string) {
 
   return await inlineCss(html, {
     ...(extraCss !== null ? {extraCss} : {}),
+    //@ts-ignore
+    removeHtmlSelectors: true,
     url: ' ',
   })
 }
