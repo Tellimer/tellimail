@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
-const inline_css_1 = __importDefault(require("inline-css"));
+const juice_1 = __importDefault(require("juice"));
 const vue_server_renderer_1 = require("vue-server-renderer");
 function getCssFile(file) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -28,9 +28,7 @@ function render(app, themeFile) {
             extraCss = yield getCssFile(themeFile);
         }
         console.log(extraCss, html);
-        return yield inline_css_1.default(html, Object.assign({}, (extraCss !== null ? { extraCss } : {}), { 
-            //@ts-ignore
-            removeHtmlSelectors: true, url: ' ' }));
+        return yield juice_1.default(html, Object.assign({}, (extraCss !== null ? { extraCss } : {})));
     });
 }
 exports.default = render;
