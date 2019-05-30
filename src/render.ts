@@ -19,6 +19,7 @@ export default async function render(app: Vue, themeFile?: string) {
   console.log(extraCss, html)
 
   return await juice(html, {
+    applyAttributesTableElements: false,
     ...(extraCss !== null ? {extraCss} : {}),
   })
 }
