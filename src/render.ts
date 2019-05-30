@@ -1,5 +1,5 @@
 import fs from 'fs'
-import juice from 'juice'
+import inlineCss from 'inline-css'
 import Vue from 'vue'
 import { createRenderer } from 'vue-server-renderer'
 
@@ -18,7 +18,8 @@ export default async function render(app: Vue, themeFile?: string) {
 
   console.log(extraCss, html)
 
-  return await juice(html, {
+  return await inlineCss(html, {
     ...(extraCss !== null ? {extraCss} : {}),
+    url: ' ',
   })
 }
