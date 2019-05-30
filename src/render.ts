@@ -16,6 +16,8 @@ export default async function render(app: Vue, themeFile?: string) {
     extraCss = await getCssFile(themeFile)
   }
 
+  console.log(extraCss, html)
+
   return await inlineCss(html, {
     ...(extraCss !== null ? {extraCss} : {}),
     url: ' ',
