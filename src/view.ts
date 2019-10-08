@@ -14,6 +14,7 @@ export class View {
 
   public async render(): Promise<string> {
     const app = new Vue({
+      comments: true,
       mixins: [this.mixin],
       template: this.template,
     })

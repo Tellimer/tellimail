@@ -23,6 +23,7 @@ class View {
     render() {
         return __awaiter(this, void 0, void 0, function* () {
             const app = new vue_1.default({
+                comments: true,
                 mixins: [this.mixin],
                 template: this.template,
             });
