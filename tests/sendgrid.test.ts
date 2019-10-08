@@ -1,6 +1,6 @@
-import mail, { View, Mailable, templateView } from '../src/index'
 import { expect } from 'chai'
 import path from 'path'
+import mail, { Mailable, templateView, View } from '../src/index'
 
 describe('Sendgrid', () => {
   const mailer = mail({
@@ -90,6 +90,14 @@ describe('Sendgrid', () => {
     const template = await mailable.render()
 
     expect(template).to.equal(`<html data-server-rendered="true"><head></head> <body><h1 style="color: red;">${text}</h1></body></html>`)
+  })
+
+  it('Renders template with a comment', async () => {
+    const view = await templateView(path.resolve(__dirname, 'comment.html'))
+    const mailable = new Mailable(view)
+    const template = await mailable.render()
+
+    expect(template).to.equal('<html data-server-rendered="true"><head></head> <body><h1><!-- hello world -->hello world</h1></body></html>')
   })
 
   it('Can send to more than 1000 people', async () => {
