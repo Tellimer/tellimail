@@ -1,7 +1,7 @@
 import fs from 'fs'
 import juice from 'juice'
 import Vue from 'vue'
-import { createRenderer } from 'vue-server-renderer'
+import { createRenderer } from './renderer'
 
 async function getCssFile(file: string) {
   return await fs.readFileSync(file, 'utf-8')

@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const juice_1 = __importDefault(require("juice"));
-const vue_server_renderer_1 = require("vue-server-renderer");
+const renderer_1 = require("./renderer");
 function getCssFile(file) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield fs_1.default.readFileSync(file, 'utf-8');
@@ -21,7 +21,7 @@ function getCssFile(file) {
 }
 function render(app, themeFile) {
     return __awaiter(this, void 0, void 0, function* () {
-        const renderer = vue_server_renderer_1.createRenderer();
+        const renderer = renderer_1.createRenderer();
         const html = yield renderer.renderToString(app);
         let extraCss = null;
         if (themeFile) {
